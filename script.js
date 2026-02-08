@@ -1,132 +1,119 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 1. LOGIN & PRICING ---
+    // --- LOGIN LOGIC ---
     const loginBtn = document.getElementById("login-btn");
-    const loginScreen = document.getElementById("login-screen");
-    const mainUI = document.getElementById("main-ui");
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const loginMsg = document.getElementById("login-msg");
-    const loginBox = document.getElementById("login-box");
-    const pricingBox = document.getElementById("pricing-box");
-    
-    document.getElementById("show-pricing-btn").onclick = () => { loginBox.classList.add("hidden"); pricingBox.classList.remove("hidden"); };
-    document.getElementById("back-to-login-btn").onclick = () => { pricingBox.classList.add("hidden"); loginBox.classList.remove("hidden"); };
+    if(loginBtn) {
+        // Only run this if we are on the Login Screen
+        const loginScreen = document.getElementById("login-screen");
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        const loginMsg = document.getElementById("login-msg");
+        const loginBox = document.getElementById("login-box");
+        const pricingBox = document.getElementById("pricing-box");
 
-    loginBtn.onclick = async () => {
-        const username = usernameInput.value;
-        const password = passwordInput.value;
-        loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> AUTHENTICATING...';
-        
-        try {
-            const res = await fetch('/api/login', { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify({ username, password }) 
-            });
-            const data = await res.json();
+        document.getElementById("show-pricing-btn").onclick = () => { loginBox.classList.add("hidden"); pricingBox.classList.remove("hidden"); };
+        document.getElementById("back-to-login-btn").onclick = () => { pricingBox.classList.add("hidden"); loginBox.classList.remove("hidden"); };
+
+        loginBtn.onclick = async () => {
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+            loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> AUTHENTICATING...';
             
-            if (data.status === 'success') {
-                setTimeout(() => {
-                    loginScreen.classList.add('hidden'); 
-                    mainUI.classList.remove('hidden');   
-                }, 800);
-            } else {
-                loginMsg.innerText = "ACCESS DENIED"; 
-                loginBtn.innerText = "INITIALIZE LINK";
+            try {
+                const res = await fetch('/api/login', { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ username, password }) 
+                });
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    // 👇 SUCCESS: RELOAD PAGE TO GET MAIN UI
+                    window.location.reload();
+                } else {
+                    loginMsg.innerText = "ACCESS DENIED"; 
+                    loginBtn.innerText = "INITIALIZE LINK";
+                }
+            } catch (e) { 
+                loginMsg.innerText = "SERVER ERROR"; 
+                loginBtn.innerText = "RETRY"; 
             }
-        } catch (e) { 
-            loginMsg.innerText = "SERVER ERROR"; 
-            loginBtn.innerText = "RETRY"; 
-        }
-    };
+        };
+    }
 
-    // --- LOGOUT LOGIC (New) ---
+    // --- LOGOUT LOGIC ---
     window.logoutSystem = async function() {
         await fetch('/api/logout', { method: 'POST' });
-        location.reload();
+        window.location.reload();
     }
 
-    // --- CHAT LOGIC ---
+    // --- CHAT LOGIC (Only runs if Main UI exists) ---
     const sendBtn = document.getElementById("send-btn");
-    const input = document.getElementById("user-input");
-    const chatDisplay = document.getElementById("chat-display");
-    const typingIndicator = document.getElementById("typing-indicator");
-    
-    document.getElementById("session-id").innerText = "CORE-" + Math.floor(Math.random()*0xFFFFFF).toString(16).toUpperCase();
-
-    sendBtn.onclick = () => sendMessage();
-    input.onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
-
-    async function sendMessage(customMsg = null) {
-        const message = customMsg || input.value.trim();
-        if (!message) return;
-
-        if(!customMsg) {
-            addMessage(message, "user");
-            input.value = "";
-        } else {
-            addMessage(`[CMD]: ${message}`, "user");
-        }
+    if(sendBtn) {
+        const input = document.getElementById("user-input");
+        const chatDisplay = document.getElementById("chat-display");
+        const typingIndicator = document.getElementById("typing-indicator");
         
-        typingIndicator.style.display = "flex";
-        
-        try {
-            const res = await fetch("/api/chat", { 
-                method: "POST", 
-                headers: { "Content-Type": "application/json" }, 
-                body: JSON.stringify({ message }) 
-            });
-            const data = await res.json();
-            typingIndicator.style.display = "none";
+        document.getElementById("session-id").innerText = "CORE-" + Math.floor(Math.random()*0xFFFFFF).toString(16).toUpperCase();
+
+        sendBtn.onclick = () => sendMessage();
+        input.onkeydown = (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } };
+
+        async function sendMessage(customMsg = null) {
+            const message = customMsg || input.value.trim();
+            if (!message) return;
+
+            if(!customMsg) { addMessage(message, "user"); input.value = ""; } 
+            else { addMessage(`[CMD]: ${message}`, "user"); }
             
-            if (data.status === 'success') {
-                addMessage(data.response, "bot");
-            } else {
-                // If Access Denied, Show Error and maybe Redirect
-                addMessage(data.response, "bot");
-                if(data.response.includes("ACCESS DENIED")) {
-                     setTimeout(() => location.reload(), 2000);
-                }
+            typingIndicator.style.display = "flex";
+            
+            try {
+                const res = await fetch("/api/chat", { 
+                    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message }) 
+                });
+                const data = await res.json();
+                typingIndicator.style.display = "none";
+                
+                if (data.status === 'success') { addMessage(data.response, "bot"); } 
+                else { addMessage(data.response, "bot"); }
+            } catch (error) { 
+                typingIndicator.style.display = "none"; addMessage("❌ Connection Error.", "bot"); 
             }
-        } catch (error) { 
-            typingIndicator.style.display = "none"; 
-            addMessage("❌ Connection Error.", "bot"); 
         }
-    }
 
-    function addMessage(text, sender) {
-        const msgDiv = document.createElement("div");
-        msgDiv.className = `message ${sender}-message`;
-        let contentHtml = typeof marked !== 'undefined' ? marked.parse(text) : text;
-        msgDiv.innerHTML = `<div class="avatar"><i class="fa-solid ${sender==="bot"?"fa-robot":"fa-user"}"></i></div>
-                            <div class="msg-body"><div class="sender">${sender==="bot"?"SYNAPSE CORE":"YOU"}</div><div class="text">${contentHtml}</div></div>`;
-        chatDisplay.appendChild(msgDiv);
-        chatDisplay.scrollTop = chatDisplay.scrollHeight;
-        
-        if(sender === 'bot') {
-            msgDiv.querySelectorAll('pre').forEach(pre => {
-                const code = pre.querySelector('code').innerText;
-                const lang = pre.querySelector('code').className; 
-                const actionDiv = document.createElement('div');
-                actionDiv.className = 'code-actions';
-                
-                const copyBtn = document.createElement('button');
-                copyBtn.className = 'action-btn';
-                copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
-                copyBtn.onclick = () => navigator.clipboard.writeText(code);
-                actionDiv.appendChild(copyBtn);
-                
-                if(lang.includes('html')) {
-                   const runBtn = document.createElement('button');
-                   runBtn.className = 'action-btn';
-                   runBtn.innerHTML = '<i class="fa-solid fa-play"></i> Run';
-                   runBtn.onclick = () => openPreview(code);
-                   actionDiv.appendChild(runBtn);
-                }
-                
-                pre.appendChild(actionDiv);
-                hljs.highlightElement(pre.querySelector('code'));
-            });
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement("div");
+            msgDiv.className = `message ${sender}-message`;
+            let contentHtml = typeof marked !== 'undefined' ? marked.parse(text) : text;
+            msgDiv.innerHTML = `<div class="avatar"><i class="fa-solid ${sender==="bot"?"fa-robot":"fa-user"}"></i></div>
+                                <div class="msg-body"><div class="sender">${sender==="bot"?"SYNAPSE CORE":"YOU"}</div><div class="text">${contentHtml}</div></div>`;
+            chatDisplay.appendChild(msgDiv);
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            
+            if(sender === 'bot') {
+                msgDiv.querySelectorAll('pre').forEach(pre => {
+                    const code = pre.querySelector('code').innerText;
+                    const lang = pre.querySelector('code').className; 
+                    const actionDiv = document.createElement('div');
+                    actionDiv.className = 'code-actions';
+                    
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'action-btn';
+                    copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy';
+                    copyBtn.onclick = () => navigator.clipboard.writeText(code);
+                    actionDiv.appendChild(copyBtn);
+                    
+                    if(lang.includes('html')) {
+                       const runBtn = document.createElement('button');
+                       runBtn.className = 'action-btn';
+                       runBtn.innerHTML = '<i class="fa-solid fa-play"></i> Run';
+                       runBtn.onclick = () => openPreview(code);
+                       actionDiv.appendChild(runBtn);
+                    }
+                    pre.appendChild(actionDiv);
+                    hljs.highlightElement(pre.querySelector('code'));
+                });
+            }
         }
     }
 });
@@ -146,3 +133,5 @@ function openPreview(code) {
 }
 function closePreview() { document.getElementById("code-preview-modal").classList.add("hidden"); }
 function clearChat() { document.getElementById("chat-display").innerHTML = ''; }
+// Mock File Loader
+window.loadFile = function(name) { sendMessage("Load module: " + name); }

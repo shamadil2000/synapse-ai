@@ -11,17 +11,17 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 app = Flask(__name__, static_folder=BASE_DIR, template_folder=BASE_DIR)
 
-# 👇 SECURITY UPGRADE: Secret Key for Sessions
-app.secret_key = secrets.token_hex(32)  # Random powerful key
+# Security Key
+app.secret_key = secrets.token_hex(32)
 
-# API Key (From .env)
-API_KEY =("AIzaSyBmS2JEVR9a0x9xIrkIEQU_qKO4B3k2qdw")
+# API Key
+API_KEY = os.getenv("GEMINI_API_KEY")
 client = None
 
 if API_KEY:
     try:
         client = genai.Client(api_key=API_KEY)
-        print("✅ SYNAPSE CORE: Connected to Matrix.")
+        print("✅ SYNAPSE CORE: Connected.")
     except Exception as e:
         print(f"❌ Connection Error: {e}")
 
@@ -42,7 +42,7 @@ Identity: SYNAPSE NEURAL CORE V5.
 Developer: Chenith.
 ROLE: Elite AI Hacker & Coding Assistant.
 MODES:
-1. TERMINAL MODE: Simulate Linux Terminal output for commands.
+1. TERMINAL MODE: Simulate Linux Terminal output.
 2. SECURITY MODE: Scan code for vulnerabilities.
 3. CODING MODE: Provide full code.
 """
@@ -54,10 +54,7 @@ def generate_response(user_message):
             response = client.models.generate_content(
                 model=model,
                 contents=user_message,
-                config=types.GenerateContentConfig(
-                    system_instruction=SYSTEM_PROMPT,
-                    temperature=0.7
-                )
+                config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT, temperature=0.7)
             )
             return response.text
         except:
@@ -66,7 +63,9 @@ def generate_response(user_message):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # 👇 SECURITY CHECK: HTML එක යවද්දීම බලනවා
+    is_logged_in = session.get('logged_in', False)
+    return render_template('index.html', logged_in=is_logged_in)
 
 @app.route('/<path:filename>')
 def serve_static(filename):
@@ -80,18 +79,17 @@ def login():
     users = get_users()
     
     if username in users and users[username] == password:
-        # 👇 USER LOGIN වුණාම SESSION එකක් හදනවා
         session['logged_in'] = True
         session['user'] = username
-        return jsonify({'status': 'success', 'user': username})
+        return jsonify({'status': 'success'})
     
     return jsonify({'status': 'error', 'message': 'Invalid Credentials'})
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    # 👇 SECURITY CHECK: Login වෙලා නැත්නම් එලියට දානවා!
+    # 👇 API SECURITY
     if not session.get('logged_in'):
-        return jsonify({'status': 'error', 'response': '🚫 ACCESS DENIED: Authorization Required. Nice try, hacker!'}), 403
+        return jsonify({'status': 'error', 'response': '🚫 ACCESS DENIED: Session Expired.'}), 403
 
     if not client: return jsonify({'status': 'error', 'response': 'API Key Missing.'})
     
@@ -99,12 +97,11 @@ def chat():
     reply = generate_response(data.get('message', ''))
     return jsonify({'status': 'success', 'response': reply})
 
-# 👇 LOGOUT API
 @app.route('/api/logout', methods=['POST'])
 def logout():
     session.clear()
     return jsonify({'status': 'success'})
 
 if __name__ == '__main__':
-    print("--- SYNAPSE SECURITY ONLINE ---")
+    print("--- SYNAPSE SECURE SERVER ONLINE ---")
     app.run(debug=True, port=5000)
