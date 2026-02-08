@@ -20,28 +20,56 @@
     {% if not logged_in %}
     
     <div id="login-screen" class="login-overlay">
-        <div id="login-box" class="login-box glass-panel glow-effect">
+        
+        <div id="login-box" class="login-box">
             <div class="login-logo pulse-anim"><i class="fa-solid fa-brain"></i></div>
             <h2 class="glitch-text">ACCESS CONTROL</h2>
-            <div class="input-group"><i class="fa-solid fa-user"></i> <input type="text" id="username" placeholder="IDENTIFIER"></div>
-            <div class="input-group"><i class="fa-solid fa-key"></i> <input type="password" id="password" placeholder="ACCESS KEY"></div>
+            
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i> 
+                <input type="text" id="username" placeholder="IDENTIFIER">
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-key"></i> 
+                <input type="password" id="password" placeholder="ACCESS KEY">
+            </div>
+            
             <button id="login-btn" class="execute-btn full-width">INITIALIZE LINK <i class="fa-solid fa-bolt"></i></button>
             <p id="login-msg" class="error-text"></p>
+            
             <div class="divider"><span>SECURE CONNECTION</span></div>
-            <button id="show-pricing-btn" class="secondary-btn full-width"><i class="fa-solid fa-diamond"></i> GET ACCESS ID</button>
+            <button id="show-pricing-btn" class="premium-btn full-width">
+                <i class="fa-solid fa-crown"></i> GET ACCESS ID
+            </button>
         </div>
 
-        <div id="pricing-box" class="login-box glass-panel hidden">
-            <div class="login-logo" style="color: #00ff9d;"><i class="fa-solid fa-gem"></i></div>
-            <h2>UNLOCK SYNAPSE</h2>
-            <div class="price-tag"><span class="currency">LKR</span><span class="amount">1,500</span><span class="duration">/ MONTH</span></div>
+        <div id="pricing-box" class="login-box hidden">
+            <div class="login-logo" style="color: #00ff9d; font-size: 3rem;"><i class="fa-solid fa-gem"></i></div>
+            <h2 class="pricing-title">UNLOCK SYNAPSE</h2>
+            <p class="pricing-sub">Advanced AI for Developers & Hackers</p>
+            
+            <div class="price-card">
+                <div class="price-tag">
+                    <span class="currency">LKR</span>
+                    <span class="amount">1,500</span>
+                    <span class="duration">/ MO</span>
+                </div>
+            </div>
+
             <ul class="features-list">
-                <li><i class="fa-solid fa-shield-halved"></i> Vulnerability Scanner</li>
-                <li><i class="fa-solid fa-code"></i> Live Code Preview</li>
-                <li><i class="fa-solid fa-terminal"></i> Root Terminal Access</li>
+                <li><i class="fa-solid fa-check"></i> <span>Vulnerability Scanner & Exploits</span></li>
+                <li><i class="fa-solid fa-check"></i> <span>Live Code Preview Engine</span></li>
+                <li><i class="fa-solid fa-check"></i> <span>Root Terminal Access</span></li>
+                <li><i class="fa-solid fa-check"></i> <span>24/7 Server Uptime</span></li>
             </ul>
-            <a href="https://wa.me/947XXXXXXXX?text=Hi Chenith, I want to buy SYNAPSE AI Access ID." target="_blank" class="whatsapp-btn full-width"><i class="fa-brands fa-whatsapp"></i> CONTACT ON WHATSAPP</a>
-            <button id="back-to-login-btn" class="text-btn"><i class="fa-solid fa-arrow-left"></i> Back to Console</button>
+
+            <a href="https://wa.me/947XXXXXXXX?text=Hi Chenith, I want to buy SYNAPSE AI Access ID." target="_blank" class="whatsapp-btn full-width">
+                <i class="fa-brands fa-whatsapp"></i> CONTACT ON WHATSAPP
+            </a>
+
+            <button id="back-to-login-btn" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to Console
+            </button>
         </div>
     </div>
 
