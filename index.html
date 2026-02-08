@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYNAPSE | NEURAL CORE V5</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark-reasonable.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-system">
+        <div class="grid-layer"></div>
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+    </div>
+
+    <div id="login-screen" class="login-overlay">
+        
+        <div id="login-box" class="login-box glass-panel glow-effect">
+            <div class="login-logo pulse-anim"><i class="fa-solid fa-brain"></i></div>
+            <h2 class="glitch-text">ACCESS CONTROL</h2>
+            
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i> 
+                <input type="text" id="username" placeholder="IDENTIFIER">
+            </div>
+            <div class="input-group">
+                <i class="fa-solid fa-key"></i> 
+                <input type="password" id="password" placeholder="ACCESS KEY">
+            </div>
+            
+            <button id="login-btn" class="execute-btn full-width">INITIALIZE LINK <i class="fa-solid fa-bolt"></i></button>
+            <p id="login-msg" class="error-text"></p>
+            
+            <div class="divider"><span>SECURE CONNECTION</span></div>
+            <button id="show-pricing-btn" class="secondary-btn full-width">
+                <i class="fa-solid fa-diamond"></i> GET ACCESS ID
+            </button>
+        </div>
+
+        <div id="pricing-box" class="login-box glass-panel hidden">
+            <div class="login-logo" style="color: #00ff9d;"><i class="fa-solid fa-gem"></i></div>
+            <h2>UNLOCK SYNAPSE</h2>
+            <div class="price-tag"><span class="currency">LKR</span><span class="amount">1,500</span><span class="duration">/ MONTH</span></div>
+            <ul class="features-list">
+                <li><i class="fa-solid fa-shield-halved"></i> Vulnerability Scanner</li>
+                <li><i class="fa-solid fa-code"></i> Live Code Preview</li>
+                <li><i class="fa-solid fa-terminal"></i> Root Terminal Access</li>
+            </ul>
+            <a href="https://wa.me/947XXXXXXXX?text=Hi Chenith, I want to buy SYNAPSE AI Access ID." target="_blank" class="whatsapp-btn full-width">
+                <i class="fa-brands fa-whatsapp"></i> CONTACT ON WHATSAPP
+            </a>
+            <button id="back-to-login-btn" class="text-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to Console
+            </button>
+        </div>
+    </div>
+
+    <div id="main-ui" class="ui-container hidden">
+        
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <div class="logo-icon"><i class="fa-solid fa-brain fa-pulse"></i></div>
+                <div class="brand-text"><h1>SYNAPSE</h1><span class="version">CORE V5.0 PRO</span></div>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-btn active" onclick="switchView('terminal')"><i class="fa-solid fa-terminal"></i> <span>NEURAL TERMINAL</span></button>
+                <button class="nav-btn" onclick="switchView('projects')"><i class="fa-solid fa-microchip"></i> <span>PROJECT FILES</span></button>
+                <button class="nav-btn" onclick="switchView('memory')"><i class="fa-solid fa-server"></i> <span>MEMORY BANK</span></button>
+                <button class="nav-btn" onclick="switchView('settings')"><i class="fa-solid fa-sliders"></i> <span>SYSTEM CONFIG</span></button>
+            </nav>
+            <div class="system-status">
+                <div class="status-row"><span class="label">CPU LOAD <span id="cpu-text">12%</span></span><div class="progress-bar"><div class="fill" id="cpu-bar" style="width: 12%"></div></div></div>
+                <div class="status-row"><span class="label">MEMORY <span id="mem-text">34%</span></span><div class="progress-bar"><div class="fill" id="mem-bar" style="width: 34%"></div></div></div>
+                <div class="connection-state online"><span class="blink">●</span> UPLINK ESTABLISHED</div>
+            </div>
+        </aside>
+
+        <main class="main-viewport glass-panel">
+            
+            <div id="view-terminal" class="view-section active">
+                <header class="viewport-header">
+                    <div class="header-left"><i class="fa-solid fa-hashtag"></i> SESSION: <span id="session-id">LOADING...</span></div>
+                    <div class="header-right"><button class="tool-btn" onclick="clearChat()"><i class="fa-solid fa-trash-can"></i></button></div>
+                </header>
+                
+                <div id="chat-display" class="chat-content custom-scroll">
+                    <div class="message bot-message">
+                        <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                        <div class="msg-body">
+                            <div class="sender">SYNAPSE CORE</div>
+                            <div class="text">
+                                Neural Link Established...<br>
+                                Access Level: <strong>ADMIN</strong><br>
+                                Awaiting Command Input.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="input-section">
+                    <div class="input-wrapper">
+                        <div class="prompt-sign">❯</div>
+                        <textarea id="user-input" placeholder="Enter command or code..." rows="1"></textarea>
+                        <button id="send-btn" class="execute-btn">EXECUTE</button>
+                    </div>
+                    <div class="typing-indicator" id="typing-indicator"><span>PROCESSING...</span><div class="loader-bar"></div></div>
+                </footer>
+            </div>
+
+            <div id="view-projects" class="view-section hidden">
+                <h2 class="section-title"><i class="fa-solid fa-folder-open"></i> SAVED MODULES</h2>
+                <div class="file-grid">
+                    <div class="file-card" onclick="loadFile('port_scanner.py')"><i class="fa-brands fa-python"></i><span>port_scanner.py</span><div class="file-info">1.2 KB | Python Script</div></div>
+                    <div class="file-card" onclick="loadFile('sql_inject.sql')"><i class="fa-solid fa-database"></i><span>sql_inject.sql</span><div class="file-info">0.8 KB | SQL Query</div></div>
+                    <div class="file-card" onclick="loadFile('payload.sh')"><i class="fa-solid fa-terminal"></i><span>payload.sh</span><div class="file-info">2.4 KB | Shell Script</div></div>
+                    <div class="file-card locked"><i class="fa-solid fa-lock"></i><span>kernel_exploit.c</span><div class="file-info">ENCRYPTED</div></div>
+                </div>
+            </div>
+
+            <div id="view-memory" class="view-section hidden">
+                <h2 class="section-title"><i class="fa-solid fa-server"></i> SYSTEM LOGS</h2>
+                <div class="memory-console custom-scroll" id="memory-log-container">
+                    <div class="log-entry"><span class="time">[10:00:01]</span> <span class="sys">SYS_INIT</span> Core Modules Loaded.</div>
+                </div>
+            </div>
+
+            <div id="view-settings" class="view-section hidden">
+                <h2 class="section-title"><i class="fa-solid fa-sliders"></i> NEURAL CONFIGURATION</h2>
+                <div class="settings-grid">
+                    <div class="setting-card"><span>Hacker Mode</span><input type="checkbox" checked></div>
+                </div>
+                <div class="logout-area">
+                    <button class="execute-btn danger-btn" onclick="location.reload()"><i class="fa-solid fa-power-off"></i> TERMINATE SESSION</button>
+                </div>
+            </div>
+        </main>
+        
+        <aside class="infobar glass-panel">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> HISTORY</h3>
+            <div class="history-list custom-scroll" id="history-list"></div>
+            <div class="debug-window">
+                <h3><i class="fa-solid fa-bug"></i> DEBUG CONSOLE</h3>
+                <div class="console-output custom-scroll" id="console-output"></div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="code-preview-modal" class="modal-overlay hidden">
+        <div class="modal-window glass-panel">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-play"></i> LIVE PREVIEW</h3>
+                <button onclick="closePreview()" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <iframe id="preview-frame"></iframe>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
