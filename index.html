@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYNAPSE | NEURAL CORE V5</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark-reasonable.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/00f3ff/brain.png">
 </head>
 <body>
+
     <div class="bg-system">
         <div class="grid-layer"></div>
-        <div class="scanlines"></div>
-        <div class="vignette"></div>
     </div>
 
     {% if not logged_in %}
@@ -34,8 +33,8 @@
                 <input type="password" id="password" placeholder="ACCESS KEY">
             </div>
             
-            <button id="login-btn" class="execute-btn full-width">INITIALIZE LINK <i class="fa-solid fa-bolt"></i></button>
-            <p id="login-msg" class="error-text"></p>
+            <button id="login-btn" class="execute-btn full-width">INITIALIZE LINK</button>
+            <p id="login-msg" class="error-text" style="color: #ff0055; margin-top: 10px; font-size: 0.9rem;"></p>
             
             <div class="divider"><span>SECURE CONNECTION</span></div>
             <button id="show-pricing-btn" class="premium-btn full-width">
@@ -46,28 +45,26 @@
         <div id="pricing-box" class="login-box hidden">
             <div class="login-logo" style="color: #00ff9d; font-size: 3rem;"><i class="fa-solid fa-gem"></i></div>
             <h2 class="pricing-title">UNLOCK SYNAPSE</h2>
-            <p class="pricing-sub">Advanced AI for Developers & Hackers</p>
-            
             <div class="price-card">
                 <div class="price-tag">
-                    <span class="currency">LKR</span>
+                    <span class="currency" style="color:#888;">LKR</span>
                     <span class="amount">1,500</span>
-                    <span class="duration">/ MO</span>
+                    <span class="duration" style="color:#666;">/ MO</span>
                 </div>
             </div>
-
-            <ul class="features-list">
-                <li><i class="fa-solid fa-check"></i> <span>Vulnerability Scanner & Exploits</span></li>
-                <li><i class="fa-solid fa-check"></i> <span>Live Code Preview Engine</span></li>
-                <li><i class="fa-solid fa-check"></i> <span>Root Terminal Access</span></li>
-                <li><i class="fa-solid fa-check"></i> <span>24/7 Server Uptime</span></li>
+            <ul style="list-style: none; text-align: left; padding: 0 10px; margin-bottom: 25px; color: #ccc; font-size: 0.9rem;">
+                <li style="margin-bottom: 10px;"><i class="fa-solid fa-check" style="color:var(--primary);"></i> Vulnerability Scanner</li>
+                <li style="margin-bottom: 10px;"><i class="fa-solid fa-check" style="color:var(--primary);"></i> Live Code Preview</li>
+                <li><i class="fa-solid fa-check" style="color:var(--primary);"></i> Root Terminal Access</li>
+            <div class="brand">
+    <div class="logo-icon"><i class="fa-solid fa-brain"></i></div>
+    <h1>SYNAPSE</h1><span class="version">CORE SYSTEM V5.0</span>
+</div>
             </ul>
-
-            <a href="https://wa.me/947XXXXXXXX?text=Hi Chenith, I want to buy SYNAPSE AI Access ID." target="_blank" class="whatsapp-btn full-width">
+            <a href="https://wa.me/94715183743?text=Hi Chenith, I want to buy SYNAPSE AI Access ID." target="_blank" class="whatsapp-btn full-width">
                 <i class="fa-brands fa-whatsapp"></i> CONTACT ON WHATSAPP
             </a>
-
-            <button id="back-to-login-btn" class="back-btn">
+            <button id="back-to-login-btn" class="execute-btn full-width" style="background: transparent; border: 1px solid #333; color: #aaa;">
                 <i class="fa-solid fa-arrow-left"></i> Back to Console
             </button>
         </div>
@@ -76,85 +73,113 @@
     {% else %}
 
     <div id="main-ui" class="ui-container">
+        
         <aside class="sidebar glass-panel">
-            <div class="brand">
-                <div class="logo-icon"><i class="fa-solid fa-brain fa-pulse"></i></div>
-                <div class="brand-text"><h1>SYNAPSE</h1><span class="version">CORE V5.0 PRO</span></div>
+            <div class="top-section">
+                <div class="brand">
+                    <div class="logo-icon"><i class="fa-solid fa-brain"></i></div>
+                    <h1>SYNAPSE</h1><span class="version">CORE SYSTEM V5.0</span>
+                </div>
+                <nav class="nav-menu">
+                    <button class="nav-btn active" onclick="switchView('terminal')"><i class="fa-solid fa-terminal"></i> TERMINAL</button>
+                    <button class="nav-btn" onclick="switchView('projects')"><i class="fa-solid fa-folder-tree"></i> MODULES</button>
+                    <button class="nav-btn" onclick="switchView('memory')"><i class="fa-solid fa-database"></i> MEMORY</button>
+                    <button class="nav-btn" onclick="switchView('settings')"><i class="fa-solid fa-gears"></i> CONFIG</button>
+                </nav>
             </div>
-            <nav class="nav-menu">
-                <button class="nav-btn active" onclick="switchView('terminal')"><i class="fa-solid fa-terminal"></i> <span>NEURAL TERMINAL</span></button>
-                <button class="nav-btn" onclick="switchView('projects')"><i class="fa-solid fa-microchip"></i> <span>PROJECT FILES</span></button>
-                <button class="nav-btn" onclick="switchView('memory')"><i class="fa-solid fa-server"></i> <span>MEMORY BANK</span></button>
-                <button class="nav-btn" onclick="switchView('settings')"><i class="fa-solid fa-sliders"></i> <span>SYSTEM CONFIG</span></button>
-            </nav>
+            
             <div class="system-status">
-                <div class="status-row"><span class="label">CPU LOAD <span id="cpu-text">12%</span></span><div class="progress-bar"><div class="fill" id="cpu-bar" style="width: 12%"></div></div></div>
-                <div class="status-row"><span class="label">MEMORY <span id="mem-text">34%</span></span><div class="progress-bar"><div class="fill" id="mem-bar" style="width: 34%"></div></div></div>
-                <div class="connection-state online"><span class="blink">●</span> UPLINK ESTABLISHED</div>
+                <div class="status-row">
+                    <span class="label">CPU USAGE <span id="cpu-val">0%</span></span>
+                    <div class="progress-bar"><div class="fill" id="cpu-bar" style="width: 12%"></div></div>
+                </div>
+                <div class="status-row">
+                    <span class="label">RAM ALLOC <span id="ram-val">0%</span></span>
+                    <div class="progress-bar"><div class="fill" id="ram-bar" style="width: 34%"></div></div>
+                </div>
+                <div style="font-size: 0.7rem; color: #00ff9d; margin-top: 10px;"><i class="fa-solid fa-wifi"></i> UPLINK: STABLE</div>
             </div>
         </aside>
 
         <main class="main-viewport glass-panel">
+            
             <div id="view-terminal" class="view-section active">
                 <header class="viewport-header">
-                    <div class="header-left"><i class="fa-solid fa-hashtag"></i> SESSION: <span id="session-id">LOADING...</span></div>
-                    <div class="header-right"><button class="tool-btn" onclick="clearChat()"><i class="fa-solid fa-trash-can"></i></button></div>
+                    <div class="header-left">SESSION ID: <span id="session-id" style="color:#fff;">CONNECTING...</span></div>
+                    <button class="action-btn" onclick="clearChat()"><i class="fa-solid fa-trash"></i> CLEAR</button>
                 </header>
+                
                 <div id="chat-display" class="chat-content custom-scroll">
                     <div class="message bot-message">
                         <div class="avatar"><i class="fa-solid fa-robot"></i></div>
                         <div class="msg-body">
-                            <div class="sender">SYNAPSE CORE</div>
-                            <div class="text">Neural Link Established...<br>Access Level: <strong>ADMIN</strong><br>Awaiting Command Input.</div>
+                            <div class="sender">SYSTEM</div>
+                            <div class="text">Neural Link Established.<br>Welcome back, Admin.<br>System ready for input...</div>
                         </div>
                     </div>
                 </div>
+
                 <footer class="input-section">
                     <div class="input-wrapper">
-                        <div class="prompt-sign">❯</div>
-                        <textarea id="user-input" placeholder="Enter command or code..." rows="1"></textarea>
-                        <button id="send-btn" class="execute-btn">EXECUTE</button>
+                        <span class="prompt-sign">❯_</span>
+                        <textarea id="user-input" placeholder="Execute command..." rows="1"></textarea>
+                        <button id="send-btn" class="execute-btn" style="width: auto; padding: 8px 25px;">SEND</button>
                     </div>
-                    <div class="typing-indicator" id="typing-indicator"><span>PROCESSING...</span><div class="loader-bar"></div></div>
+                    <div id="typing-indicator" style="display:none; color:var(--primary); font-size:0.8rem; margin-top:5px; padding-left:10px;">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Processing...
+                    </div>
                 </footer>
             </div>
-            
+
             <div id="view-projects" class="view-section hidden">
-                <h2 class="section-title"><i class="fa-solid fa-folder-open"></i> SAVED MODULES</h2>
+                <header class="viewport-header"><h2><i class="fa-solid fa-microchip"></i> LOADED MODULES</h2></header>
                 <div class="file-grid">
                     <div class="file-card" onclick="loadFile('port_scanner.py')"><i class="fa-brands fa-python"></i><span>port_scanner.py</span></div>
-                    <div class="file-card" onclick="loadFile('sql_inject.sql')"><i class="fa-solid fa-database"></i><span>sql_inject.sql</span></div>
+                    <div class="file-card" onclick="loadFile('vuln_check.exe')"><i class="fa-solid fa-bug"></i><span>vuln_check.exe</span></div>
+                    <div class="file-card" onclick="loadFile('payload.js')"><i class="fa-solid fa-file-code"></i><span>payload.js</span></div>
+                    <div class="file-card" onclick="loadFile('db_dump.sql')"><i class="fa-solid fa-database"></i><span>db_dump.sql</span></div>
                 </div>
             </div>
-            <div id="view-memory" class="view-section hidden">
-                <h2 class="section-title"><i class="fa-solid fa-server"></i> SYSTEM LOGS</h2>
-                <div class="memory-console custom-scroll" id="memory-log-container"></div>
-            </div>
+
             <div id="view-settings" class="view-section hidden">
-                <h2 class="section-title"><i class="fa-solid fa-sliders"></i> CONFIGURATION</h2>
-                <button class="execute-btn" style="background:red;" onclick="logoutSystem()">TERMINATE SESSION</button>
+                <div style="padding: 40px; text-align: center;">
+                    <h2>SYSTEM CONFIGURATION</h2>
+                    <br>
+                    <button class="execute-btn" style="background: #ff0055; border: none;" onclick="logoutSystem()">
+                        <i class="fa-solid fa-power-off"></i> TERMINATE SESSION (LOGOUT)
+                    </button>
+                </div>
             </div>
         </main>
-        
+
         <aside class="infobar glass-panel">
-            <h3><i class="fa-solid fa-clock-rotate-left"></i> HISTORY</h3>
-            <div class="history-list custom-scroll" id="history-list"></div>
-            <div class="debug-window">
-                <h3><i class="fa-solid fa-bug"></i> DEBUG CONSOLE</h3>
-                <div class="console-output custom-scroll" id="console-output"></div>
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> ACTIVITY LOG</h3>
+            <div class="history-list custom-scroll" id="history-list">
+                <div>[10:45] System Boot</div>
+                <div>[10:46] Auth Success</div>
+                <div>[10:48] Module Loaded</div>
+            </div>
+            <br>
+            <h3><i class="fa-solid fa-code"></i> DEBUG</h3>
+            <div style="color: #666; font-family: 'Courier New'; font-size: 0.7rem;">
+                > Connecting to port 8080...<br>
+                > Handshake OK.<br>
+                > Latency: 24ms
             </div>
         </aside>
+
     </div>
 
-    <div id="code-preview-modal" class="modal-overlay hidden">
-        <div class="modal-window glass-panel">
-            <div class="modal-header">
+    <div id="code-preview-modal" class="login-overlay hidden">
+        <div class="glass-panel" style="width: 80%; height: 80%; position: relative;">
+            <div class="viewport-header">
                 <h3><i class="fa-solid fa-play"></i> LIVE PREVIEW</h3>
-                <button onclick="closePreview()" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closePreview()" class="action-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <iframe id="preview-frame"></iframe>
+            <iframe id="preview-frame" style="width:100%; height:100%; border:none; background:white;"></iframe>
         </div>
     </div>
+
     {% endif %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>

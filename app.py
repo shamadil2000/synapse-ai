@@ -15,7 +15,7 @@ app = Flask(__name__, static_folder=BASE_DIR, template_folder=BASE_DIR)
 app.secret_key = secrets.token_hex(32)
 
 # API Key
-API_KEY = os.getenv("GEMINI_API_KEY")
+API_KEY =("AIzaSyB3X8gRFiL8k-ENXeRIVCLMW_eLSHbE528")
 client = None
 
 if API_KEY:
